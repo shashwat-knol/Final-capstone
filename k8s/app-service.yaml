@@ -1,0 +1,32 @@
+# Define a 'Service' To Expose the application
+apiVersion: v1
+kind: Service
+metadata:
+  name: fleetms-service
+spec:
+  ports:
+    - protocol: "TCP"
+      port: 8080    # Port inside the cluster
+      targetPort: 8080   # Port exposed to the outside
+  selector:
+    app: fleetms-v2
+  type: NodePort
+
+---
+
+# Define a 'Service' To Expose MySQL to Other Services
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    tier: database
+spec:
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: mysql
+    tier: database
+  clusterIP: None # DNS is used, so clusterIP is not needed
